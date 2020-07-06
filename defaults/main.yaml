@@ -1,0 +1,30 @@
+---
+# Role defaults (see vars/ for more defaults) ------------------------------------------------------------------------ #
+project_name: ttn-stack
+data_dir: /data
+
+# Admin account details ---------------------------------------------------------------------------------------------- #
+admin_email: admin@example.com
+admin_password: admin
+
+# Things Stack base URL ---------------------------------------------------------------------------------------------- #
+url: http://thethings.example.com:1885
+
+# SendGrid API key --------------------------------------------------------------------------------------------------- #
+sendgrid_api_key: '' # https://app.sendgrid.com/settings/api_keys
+
+# HTTP server configuration ------------------------------------------------------------------------------------------ #
+block_key: '' # generate 32 bytes (openssl rand -hex 32)
+hash_key: ''  # generate 64 bytes (openssl rand -hex 64)
+metrics_password: metrics
+pprof_password: pprof
+
+# Web UI configuration ----------------------------------------------------------------------------------------------- #
+client_secret: '' # generate 16 bytes (openssl rand -hex 16)
+
+# Certificates ------------------------------------------------------------------------------------------------------- #
+cacert: /etc/ssl/certs/ca-bundle.crt
+cert: /etc/ssl/certs/localhost.crt
+key: /etc/ssl/certs/localhost.key
+
+# -------------------------------------------------------------------------------------------------------------------- #

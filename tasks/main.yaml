@@ -1,0 +1,38 @@
+---
+# setup -------------------------------------------------------------------------------------------------------------- #
+- name: include setup tasks
+  include_tasks: setup.yaml
+
+# pre-installation tasks --------------------------------------------------------------------------------------------- #
+- name: include pre-installation tasks
+  include_tasks: "{{ pre }}"
+  with_fileglob:
+    - "tasks/pre-*.yaml"
+  loop_control:
+    loop_var: pre
+
+# installation tasks ------------------------------------------------------------------------------------------------- #
+- name: include installation tasks
+  include_tasks: "{{ install }}"
+  with_fileglob:
+    - "tasks/install-*.yaml"
+  loop_control:
+    loop_var: install
+
+# post installation, configuration tasks ----------------------------------------------------------------------------- #
+- name: include configuration tasks
+  include_tasks: "{{ config }}"
+  with_fileglob:
+    - "tasks/configure-*.yaml"
+  loop_control:
+    loop_var: config
+
+# post configuration tasks ------------------------------------------------------------------------------------------- #
+- name: include post-configuration tasks
+  include_tasks: "{{ post }}"
+  with_fileglob:
+    - "tasks/post-*.yaml"
+  loop_control:
+    loop_var: post
+
+# -------------------------------------------------------------------------------------------------------------------- #

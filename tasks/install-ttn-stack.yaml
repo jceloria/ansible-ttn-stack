@@ -1,0 +1,43 @@
+# install data directory and artifacts ------------------------------------------------------------------------------- #
+- name: create data directories
+  file:
+    path: "{{ data_dir }}/{{ project_name }}/{{ item }}"
+    state: 'directory'
+  loop:
+    - stack/config
+    - cockroach
+    - redis
+
+- name: copy configuration files
+  template:
+    src: "{{ item }}.j2"
+    dest: "{{ data_dir }}/{{ project_name }}/{{ item }}"
+  loop:
+    - stack/config/ttn-lw-stack.yml
+
+- stat:
+    path: "{{ data_dir }}/{{ project_name }}/stack/blob"
+  register: dir
+
+- name: setup custom_docker_compose_commands
+  set_fact:
+    custom_docker_compose_commands: 
+      - >-
+        pull
+      - >-
+        run --rm stack is-db init
+      - >-
+        run --rm stack is-db create-admin-user --id admin --email '{{ admin_email }}'
+        --password '{{ admin_password }}'
+      - >-
+        run --rm stack is-db create-oauth-client --id cli --name 'Command Line Interface'
+        --owner admin --no-secret --redirect-uri 'local-callback' --redirect-uri 'code'
+      - >-
+        run --rm stack is-db create-oauth-client --id console --owner admin
+        --secret '{{ client_secret }}' --redirect-uri '{{ url }}/console/oauth/callback'
+        --redirect-uri '/console/oauth/callback' --logout-redirect-uri '{{ url }}/console'
+        --logout-redirect-uri '/console'
+
+  when: dir.stat.exists == false
+
+# -------------------------------------------------------------------------------------------------------------------- #

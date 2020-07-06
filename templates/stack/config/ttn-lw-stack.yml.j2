@@ -1,0 +1,81 @@
+# Identity Server configuration
+is:
+  # Email configuration
+  email:
+    sender-name: 'The Things Stack'
+    sender-address: 'noreply@{{ url.split('//')[1].split(':')[0] }}'
+    network:
+      name: 'The Things Stack'
+      console-url: '{{ url }}/console'
+      identity-server-url: '{{ url }}/oauth'
+
+    provider: sendgrid
+    sendgrid:
+      api-key: '{{ sendgrid_api_key }}'
+
+  # Web UI configuration:
+  oauth:
+    ui:
+      canonical-url: '{{ url }}/oauth'
+      is:
+        base-url: '{{ url }}/api/v3'
+
+# HTTP server configuration
+http: 
+  cookie:
+    block-key: '{{ block_key }}'
+    hash-key: '{{ hash_key }}'
+  metrics:
+    password: '{{ metrics_password }}'
+  pprof:
+    password: '{{ pprof_password }}'
+
+# Certificates (configured using environment variables)
+#tls:
+#  source: file
+#  root-ca: /run/secrets/ca.pem
+#  certificate: /run/secrets/cert.pem
+#  key: /run/secrets/key.pem
+
+# Gateway Server
+gs:
+  mqtt:
+    public-address: '{{ url.split('//')[1].split(':')[0] }}:1882'
+    public-tls-address: '{{ url.split('//')[1].split(':')[0] }}:8882'
+  mqtt-v2:
+    public-address: '{{ url.split('//')[1].split(':')[0] }}:1881'
+    public-tls-address: '{{ url.split('//')[1].split(':')[0] }}:8881'
+
+# Gateway Configuration Server
+gcs:
+  basic-station:
+    default:
+      lns-uri: 'wss://{{ url.split('//')[1].split(':')[0] }}:8887'
+  the-things-gateway:
+    default:
+      mqtt-server: 'mqtts://{{ url.split('//')[1].split(':')[0] }}:8881'
+
+# Web UI configuration
+console:
+  ui:
+    canonical-url: '{{ url }}/console'
+    is:
+      base-url: '{{ url }}/api/v3'
+    gs:
+      base-url: '{{ url }}/api/v3'
+    ns:
+      base-url: '{{ url }}/api/v3'
+    as:
+      base-url: '{{ url }}/api/v3'
+    js:
+      base-url: '{{ url }}/api/v3'
+    qrg:
+      base-url: '{{ url }}/api/v3'
+    edtc:
+      base-url: '{{ url }}/api/v3'
+
+  oauth:
+    authorize-url: '{{ url }}/oauth/authorize'
+    token-url: '{{ url }}/oauth/token'
+    client-id: 'console'
+    client-secret: '{{ client_secret }}'
